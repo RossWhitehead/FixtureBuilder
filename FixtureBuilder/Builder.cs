@@ -99,10 +99,11 @@ namespace FixtureBuilder
         {
             Generators = new Dictionary<Type, IGenerator>()
             {
-                { typeof(int), new IntGenerator() },
-                { typeof(string), new StringGenerator() },
                 { typeof(bool), new BoolGenerator() },
-                { typeof(byte), new ByteGenerator() }
+                { typeof(byte), new ByteGenerator() },
+                { typeof(DateTime), new DateTimeGenerator() },
+                { typeof(int), new IntGenerator() },
+                { typeof(string), new StringGenerator() }
             };
         }
     }
