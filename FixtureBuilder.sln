@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FixtureBuilder", "FixtureBuilder\FixtureBuilder.csproj", "{278DA036-03F7-424D-8609-2E6A8823D07E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FixtureBuilder.Tests", "FixtureBuilder.Tests\FixtureBuilder.Tests.csproj", "{9D0D3A57-2349-49C1-8A9C-45089C83B2A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{278DA036-03F7-424D-8609-2E6A8823D07E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{278DA036-03F7-424D-8609-2E6A8823D07E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{278DA036-03F7-424D-8609-2E6A8823D07E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D0D3A57-2349-49C1-8A9C-45089C83B2A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D0D3A57-2349-49C1-8A9C-45089C83B2A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D0D3A57-2349-49C1-8A9C-45089C83B2A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D0D3A57-2349-49C1-8A9C-45089C83B2A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
