@@ -88,16 +88,32 @@ namespace FixtureBuilder.Tests
             actualResult.Prop1.Prop2.Should().NotBeNullOrEmpty();
         }
 
-
         [Fact]
         public void Create_ThrowsTypeNotSupportedException_WhereTypeDoesNotHaveAGeneratorAndIsNotAClass()
         {
             // Act
-            var builder = new Fixture();
-            Action act = () => builder.Create<long>();
+            var fixture = new Fixture();
+            Action act = () => fixture.Create<long>();
 
             // Assert
             act.ShouldThrow<TypeNotSupportedException>();
+        }
+
+        [Fact]
+        public void Create_StopsAt5Levels_WhenClassIsRecursive()
+        {
+            // Act
+            var fixture = new Fixture();
+
+            var actualResult = fixture.Create<RecursiveClass>();
+
+            // Assert
+            actualResult.Should().BeOfType(typeof(RecursiveClass));
+            actualResult.Prop1.Should().BeOfType(typeof(RecursiveClass));
+            actualResult.Prop1.Prop1.Should().BeOfType(typeof(RecursiveClass));
+            actualResult.Prop1.Prop1.Prop1.Should().BeOfType(typeof(RecursiveClass));
+            actualResult.Prop1.Prop1.Prop1.Prop1.Should().BeOfType(typeof(RecursiveClass));
+            actualResult.Prop1.Prop1.Prop1.Prop1.Prop1.Should().BeNull();
         }
 
     }
@@ -133,5 +149,10 @@ namespace FixtureBuilder.Tests
         }
 
         public SimpleClass Prop1 { get; private set; }
+    }
+
+    public class RecursiveClass
+    {
+        public RecursiveClass Prop1 { get; set; }
     }
 }

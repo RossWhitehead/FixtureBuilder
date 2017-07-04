@@ -25,6 +25,7 @@ namespace FixtureBuilder
         public object GetValue(Type type, int depth)
         {
             IGenerator generator;
+
             var hasGenerator = Generators.TryGetValue(type, out generator);
 
             if (hasGenerator)
@@ -33,6 +34,7 @@ namespace FixtureBuilder
             }
             else
             {
+                // Arrays
                 if (type.IsArray)
                 {
                     var instance = (IList)Activator.CreateInstance(type, many);
@@ -45,7 +47,9 @@ namespace FixtureBuilder
                     return instance;
                 }
 
-                if (type.GetInterfaces().Any(t => t.Name == "IReadOnlyCollection`1"))
+                // Read only collections
+                if (type.GetInterfaces().Any(t => t.Name == "IReadOnlyCollection`1") &&
+                    !type.GetInterfaces().Any(t => t.Name == "IDictionary"))
                 {
                     var ofType = type.GenericTypeArguments[0];
                     var listType = typeof(List<>);
@@ -63,7 +67,26 @@ namespace FixtureBuilder
                     return instance;
                 }
 
-                if (type.GetInterfaces().Any(t => t == typeof(IEnumerable)) && type.IsConstructedGenericType)
+                // Dictionaries
+                if (type.GetInterfaces().Any(t => t.Name == "IDictionary"))
+                {
+                    var keyType = type.GenericTypeArguments[0];
+                    var valueType = type.GenericTypeArguments[1];
+
+                    Type dictType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
+
+                    var instance = (IDictionary)Activator.CreateInstance(dictType);
+
+                    for (int i = 0; i < many; i++)
+                    {
+                        instance.Add(GetValue(keyType, depth), GetValue(valueType, depth));
+                    }
+
+                    return instance;
+                }
+
+                // Collections
+                if (type.GetInterfaces().Any(t => t == typeof(IEnumerable)))
                 {
                     var instance = (IList)Activator.CreateInstance(type);
 
@@ -75,6 +98,7 @@ namespace FixtureBuilder
                     return instance;
                 }
 
+                // Classes
                 if (type.GetTypeInfo().IsClass)
                 {
                     var constructorInfo = type.GetConstructors().OrderBy(c => c.GetParameters().Count()).First();
@@ -92,7 +116,7 @@ namespace FixtureBuilder
                     {
                         foreach (PropertyInfo propertyInfo in type.GetProperties())
                         {
-                            propertyInfo.SetValue(instance, GetValue(propertyInfo.PropertyType, depth++));
+                            propertyInfo.SetValue(instance, GetValue(propertyInfo.PropertyType, ++depth));
                         }
                     }
 

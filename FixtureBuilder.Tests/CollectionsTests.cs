@@ -68,5 +68,16 @@ namespace FixtureBuilder.Tests
             // Assert
             actualResult.Should().BeOfType(typeof(ReadOnlyCollection<int>));
         }
+
+        [Fact]
+        public void BuildDictionary_ReturnsADictionary()
+        {
+            // Act
+            var builder = new Fixture();
+            var actualResult = builder.Create<Dictionary<int, string>>();
+
+            // Assert
+            actualResult.Should().BeOfType(typeof(Dictionary<int, string>));
+        }
     }
 }

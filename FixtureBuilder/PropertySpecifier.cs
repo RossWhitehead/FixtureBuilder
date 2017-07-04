@@ -23,7 +23,9 @@ namespace FixtureBuilder
         {
             Type type = typeof(T);
 
-            var value = (T)valueBuilder.GetValue(type);
+            var depth = 1;
+
+            var value = (T)valueBuilder.GetValue(type, depth);
 
             ApplyProperties(value);
 
