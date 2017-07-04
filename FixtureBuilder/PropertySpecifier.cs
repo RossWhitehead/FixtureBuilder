@@ -8,11 +8,11 @@ namespace FixtureBuilder
 {
     public class PropertySpecifier<T> : IPropertySpecifier<T>
     {
-        private ValueBuilder valueBuilder;
+        private IValueBuilder valueBuilder;
         private readonly int many;
         private Dictionary<Expression<Func<T, object>>, object> propertySpecifications;
 
-        public PropertySpecifier(ValueBuilder valueBuilder, int many)
+        public PropertySpecifier(IValueBuilder valueBuilder, int many)
         {
             this.valueBuilder = valueBuilder;
             this.many = many;
@@ -21,8 +21,6 @@ namespace FixtureBuilder
 
         public T Create()
         {
-            var valueBuilder = new ValueBuilder(many);
-
             Type type = typeof(T);
 
             var value = (T)valueBuilder.GetValue(type);

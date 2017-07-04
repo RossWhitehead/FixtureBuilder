@@ -2,44 +2,68 @@
 
 namespace FixtureBuilder
 {
-    public class Fixture
+    /// <summary>
+    /// Fixture class responsible generating anonymous test fixtures.
+    /// </summary>
+    public class Fixture : IFixture
     {
-        public int Many { get; set; } = 3;
+        /// <summary>
+        /// How "many" elements to return for generated collections.
+        /// </summary>
+        public int Many { get; set; }
 
-        private ValueBuilder valueBuilder;
+        /// <summary>
+        /// The maximum depth the generator will traverse through the object graph when constructing complex types.
+        /// </summary>
+        public int MaxDepth { get; set; } 
 
-        private ValueBuilder ValueBuilder
+        private IValueBuilder valueBuilder;
+
+        private IValueBuilder ValueBuilder
         {
             get
             {
                 if(valueBuilder == null)
                 {
-                    valueBuilder = new ValueBuilder(Many);
+                    valueBuilder = new ValueBuilder(Many, MaxDepth);
                 }
 
                 return valueBuilder;
             }
         }
 
-        public Fixture()
-        {
-        }
-
-        public Fixture(int many)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Fixture"/> class.
+        /// </summary>
+        /// <param name="many">How "many" elements to return for generated collections.</param>
+        /// <param name="maxDepth">The maximum depth the generator will traverse through the object graph when constructing complex types.</param>
+        public Fixture(int many = 3, int maxDepth = 5)
         {
             Many = many;
+            MaxDepth = maxDepth;
         }
 
+        /// <summary>
+        /// Instructs fixture to start the build.
+        /// </summary>
+        /// <typeparam name="T">Type to build.</typeparam>
+        /// <returns>A <see cref="IPropertySpecifier{T}"/>.</returns>
         public IPropertySpecifier<T> Build<T>()
         {
             return new PropertySpecifier<T>(ValueBuilder, Many);
         }
 
+        /// <summary>
+        /// Creates a fixture of type T.
+        /// </summary>
+        /// <typeparam name="T">Any type</typeparam>
+        /// <returns>An instance of T.</returns>
         public T Create<T>()
         {
             Type type = typeof(T);
 
-            return (T)ValueBuilder.GetValue(type);
+            var depth = 1;
+            return (T)ValueBuilder.GetValue(type, depth);
         }
     }
 }

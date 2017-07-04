@@ -8,19 +8,21 @@ using FixtureBuilder.Generators;
 
 namespace FixtureBuilder
 {
-    public class ValueBuilder
+    public class ValueBuilder : IValueBuilder
     {
         private readonly int many;
+        private readonly int maxDepth;
 
         private Dictionary<Type, IGenerator> Generators { get; set; }
 
-        public ValueBuilder(int many)
+        public ValueBuilder(int many, int maxDepth)
         {
             this.many = many;
+            this.maxDepth = maxDepth;
             LoadGenerators();
         }
 
-        public object GetValue(Type type)
+        public object GetValue(Type type, int depth)
         {
             IGenerator generator;
             var hasGenerator = Generators.TryGetValue(type, out generator);
@@ -37,7 +39,7 @@ namespace FixtureBuilder
 
                     for (int i = 0; i < instance.Count; i++)
                     {
-                        instance[i] = GetValue(instance[i].GetType());
+                        instance[i] = GetValue(instance[i].GetType(), depth);
                     }
 
                     return instance;
@@ -53,7 +55,7 @@ namespace FixtureBuilder
 
                     for (int i = 0; i < many; i++)
                     {
-                        list.Add(GetValue(ofType));
+                        list.Add(GetValue(ofType, depth));
                     }
 
                     var instance = Activator.CreateInstance(type, list);
@@ -67,7 +69,7 @@ namespace FixtureBuilder
 
                     for (int i = 0; i < many; i++)
                     {
-                        instance.Add(GetValue(type.GenericTypeArguments[0]));
+                        instance.Add(GetValue(type.GenericTypeArguments[0], depth));
                     }
 
                     return instance;
@@ -86,9 +88,12 @@ namespace FixtureBuilder
 
                     var instance = constructorInfo.Invoke(parameters.ToArray());
 
-                    foreach (PropertyInfo propertyInfo in type.GetProperties())
+                    if (depth < maxDepth)
                     {
-                        propertyInfo.SetValue(instance, GetValue(propertyInfo.PropertyType));
+                        foreach (PropertyInfo propertyInfo in type.GetProperties())
+                        {
+                            propertyInfo.SetValue(instance, GetValue(propertyInfo.PropertyType, depth++));
+                        }
                     }
 
                     return instance;
