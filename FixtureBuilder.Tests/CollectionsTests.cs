@@ -12,8 +12,8 @@ namespace FixtureBuilder.Tests
         public void BuildIntArray_ReturnsAnArrayOfInts()
         {
             // Act
-            var builder = new Builder();
-            var actualResult = builder.Build<int[]>();
+            var builder = new Fixture();
+            var actualResult = builder.Create<int[]>();
 
             // Assert
             actualResult.Should().BeOfType(typeof(int[]));
@@ -23,8 +23,8 @@ namespace FixtureBuilder.Tests
         public void BuildIntArray_ReturnsAPopulatedArrayWith3Items()
         {
             // Act
-            var builder = new Builder();
-            var actualResult = builder.Build<int[]>();
+            var builder = new Fixture();
+            var actualResult = builder.Create<int[]>();
 
             // Assert
             actualResult.Should().HaveCount(3);
@@ -37,8 +37,8 @@ namespace FixtureBuilder.Tests
         public void BuildList_ReturnsAList()
         {
             // Act
-            var builder = new Builder();
-            var actualResult = builder.Build<List<int>>();
+            var builder = new Fixture();
+            var actualResult = builder.Create<List<int>>();
 
             // Assert
             actualResult.Should().BeOfType(typeof(List<int>));
@@ -48,8 +48,8 @@ namespace FixtureBuilder.Tests
         public void BuildList_ReturnsAPopulatedListWith3Items()
         {
             // Act
-            var builder = new Builder();
-            var actualResult = builder.Build<List<int>>();
+            var builder = new Fixture();
+            var actualResult = builder.Create<List<int>>();
 
             // Assert
             actualResult.Should().HaveCount(3);
@@ -62,8 +62,8 @@ namespace FixtureBuilder.Tests
         public void BuildReadOnlyCollection_ReturnsAReadOnlyCollection()
         {
             // Act
-            var builder = new Builder();
-            var actualResult = builder.Build<ReadOnlyCollection<int>>();
+            var builder = new Fixture();
+            var actualResult = builder.Create<ReadOnlyCollection<int>>();
 
             // Assert
             actualResult.Should().BeOfType(typeof(ReadOnlyCollection<int>));

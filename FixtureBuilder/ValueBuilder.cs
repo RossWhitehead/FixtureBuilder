@@ -3,28 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using FixtureBuilder.Generators;
 
 namespace FixtureBuilder
 {
-    public class Builder
+    public class ValueBuilder
     {
-        private Dictionary<Type, IGenerator> Generators { get; set; }
-        public int Many { get; set; } = 3;
+        private readonly int many;
 
-        public Builder()
+        private Dictionary<Type, IGenerator> Generators { get; set; }
+
+        public ValueBuilder(int many)
         {
+            this.many = many;
             LoadGenerators();
         }
 
-        public T Build<T>()
-        {
-            Type type = typeof(T);
-
-            return (T)GetValue(type);
-        }
-
-        private object GetValue(Type type)
+        public object GetValue(Type type)
         {
             IGenerator generator;
             var hasGenerator = Generators.TryGetValue(type, out generator);
@@ -37,7 +33,7 @@ namespace FixtureBuilder
             {
                 if (type.IsArray)
                 {
-                    var instance = (IList)Activator.CreateInstance(type, Many);
+                    var instance = (IList)Activator.CreateInstance(type, many);
 
                     for (int i = 0; i < instance.Count; i++)
                     {
@@ -55,7 +51,7 @@ namespace FixtureBuilder
 
                     var list = (IList)Activator.CreateInstance(constructedListType);
 
-                    for (int i = 0; i < Many; i++)
+                    for (int i = 0; i < many; i++)
                     {
                         list.Add(GetValue(ofType));
                     }
@@ -69,7 +65,7 @@ namespace FixtureBuilder
                 {
                     var instance = (IList)Activator.CreateInstance(type);
 
-                    for (int i = 0; i < Many; i++)
+                    for (int i = 0; i < many; i++)
                     {
                         instance.Add(GetValue(type.GenericTypeArguments[0]));
                     }
@@ -79,7 +75,16 @@ namespace FixtureBuilder
 
                 if (type.GetTypeInfo().IsClass)
                 {
-                    var instance = Activator.CreateInstance(type);
+                    var constructorInfo = type.GetConstructors().OrderBy(c => c.GetParameters().Count()).First();
+
+                    var parameters = new List<object>();
+
+                    foreach (var parameterInfo in constructorInfo.GetParameters())
+                    {
+                        parameters.Add(Activator.CreateInstance(parameterInfo.ParameterType));
+                    }
+
+                    var instance = constructorInfo.Invoke(parameters.ToArray());
 
                     foreach (PropertyInfo propertyInfo in type.GetProperties())
                     {

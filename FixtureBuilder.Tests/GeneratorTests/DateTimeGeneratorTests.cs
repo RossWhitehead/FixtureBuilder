@@ -12,10 +12,10 @@ namespace FixtureBuilder.Tests
             // Act
             DeterministicDateTime.UtcNowFunc = () => new DateTime(2016, 3, 4);
 
-            var builder = new Builder();
-            var actualResult1 = builder.Build<DateTime>();
-            var actualResult2 = builder.Build<DateTime>();
-            var actualResult3 = builder.Build<DateTime>();
+            var builder = new Fixture();
+            var actualResult1 = builder.Create<DateTime>();
+            var actualResult2 = builder.Create<DateTime>();
+            var actualResult3 = builder.Create<DateTime>();
 
             // Assert
             actualResult1.Should().Be(DeterministicDateTime.UtcNow.AddYears(-1));
