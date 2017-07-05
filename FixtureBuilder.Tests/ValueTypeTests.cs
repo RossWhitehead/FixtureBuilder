@@ -1,28 +1,179 @@
 using System;
+using FixtureBuilder;
 using FluentAssertions;
 using Xunit;
 
-namespace FixtureBuilder.Tests
+namespace Fixturefixture.Tests
 {
     public class ValueTypeTests
     {
+        private Fixture fixture;
+
+        public ValueTypeTests()
+        {
+            fixture = new Fixture();
+        }
+
         [Fact]
-        public void BuildInt_ReturnsAnInt()
+        public void CreateBool_ReturnsASequence()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<int>();
+            var actualResult1 = fixture.Create<bool>();
+            var actualResult2 = fixture.Create<bool>();
+            var actualResult3 = fixture.Create<bool>();
 
             // Assert
-            actualResult.Should().BeOfType(typeof(int));
+            actualResult1.Should().Be(true);
+            actualResult2.Should().Be(false);
+            actualResult3.Should().Be(true);
+        }
+
+        [Fact]
+        public void CreateByte_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<byte>();
+            var actualResult2 = fixture.Create<byte>();
+            var actualResult3 = fixture.Create<byte>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
+        }
+
+        [Fact]
+        public void CreateChar_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<char>();
+            var actualResult2 = fixture.Create<char>();
+            var actualResult3 = fixture.Create<char>();
+
+            // Assert
+            actualResult1.Should().Be(Convert.ToChar(1));
+            actualResult2.Should().Be(Convert.ToChar(2));
+            actualResult3.Should().Be(Convert.ToChar(3));
+        }
+
+        [Fact]
+        public void CreateDecimal_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<decimal>();
+            var actualResult2 = fixture.Create<decimal>();
+            var actualResult3 = fixture.Create<decimal>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
+        }
+
+        [Fact]
+        public void CreateDouble_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<double>();
+            var actualResult2 = fixture.Create<double>();
+            var actualResult3 = fixture.Create<double>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
+        }
+
+
+        [Fact]
+        public void CreateEnum_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<TestEnum>();
+            var actualResult2 = fixture.Create<TestEnum>();
+            var actualResult3 = fixture.Create<TestEnum>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
+        }
+
+        [Fact]
+        public void CreateFloat_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<float>();
+            var actualResult2 = fixture.Create<float>();
+            var actualResult3 = fixture.Create<float>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
+        }
+
+        [Fact]
+        public void CreateInt_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<int>();
+            var actualResult2 = fixture.Create<int>();
+            var actualResult3 = fixture.Create<int>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
+        }
+
+        [Fact]
+        public void CreateLong_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<long>();
+            var actualResult2 = fixture.Create<long>();
+            var actualResult3 = fixture.Create<long>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
+        }
+
+        [Fact]
+        public void CreateSbyte_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<sbyte>();
+            var actualResult2 = fixture.Create<sbyte>();
+            var actualResult3 = fixture.Create<sbyte>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
+        }
+
+        [Fact]
+        public void CreateShort_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<short>();
+            var actualResult2 = fixture.Create<short>();
+            var actualResult3 = fixture.Create<short>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
         }
 
         [Fact]
         public void BuildString_ReturnsAGuidAsString()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<string>();
+            var actualResult = fixture.Create<string>();
 
             Guid actualGuid;
             var isGuid = Guid.TryParse(actualResult, out actualGuid);
@@ -32,48 +183,37 @@ namespace FixtureBuilder.Tests
         }
 
         [Fact]
-        public void BuildIntArray_ReturnsAnArrayOfInts()
+        public void CreateUlong_ReturnsASequence()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<int[]>();
+            var actualResult1 = fixture.Create<ulong>();
+            var actualResult2 = fixture.Create<ulong>();
+            var actualResult3 = fixture.Create<ulong>();
 
             // Assert
-            actualResult.Should().BeOfType(typeof(int[]));
-        }
-
-        [Fact]
-        public void BuildBool_ReturnsASequenceOfBools()
-        {
-            // Act
-            var builder = new Fixture();
-            var actualResult1 = builder.Create<bool>();
-            var actualResult2 = builder.Create<bool>();
-            var actualResult3 = builder.Create<bool>();
-
-            // Assert
-            actualResult1.Should().Be(true);
-            actualResult2.Should().Be(false);
-            actualResult3.Should().Be(true);
-        }
-
-        [Fact]
-        public void BuildByte_ReturnsASequenceOfBytes()
-        {
-            // Act
-            var builder = new Fixture();
-            var actualResult1 = builder.Create<byte>();
-            var actualResult2 = builder.Create<byte>();
-            var actualResult3 = builder.Create<byte>();
-
-            // Assert
-            actualResult1.Should().BeOfType(typeof(byte));
-            actualResult2.Should().BeOfType(typeof(byte));
-            actualResult3.Should().BeOfType(typeof(byte));
-
             actualResult1.Should().Be(1);
             actualResult2.Should().Be(2);
             actualResult3.Should().Be(3);
         }
+
+        [Fact]
+        public void CreateUshort_ReturnsASequence()
+        {
+            // Act
+            var actualResult1 = fixture.Create<ushort>();
+            var actualResult2 = fixture.Create<ushort>();
+            var actualResult3 = fixture.Create<ushort>();
+
+            // Assert
+            actualResult1.Should().Be(1);
+            actualResult2.Should().Be(2);
+            actualResult3.Should().Be(3);
+        }
+    }
+
+    public enum TestEnum
+    {
+        One = 1,
+        Two = 2
     }
 }

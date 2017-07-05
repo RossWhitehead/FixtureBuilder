@@ -135,9 +135,19 @@ namespace FixtureBuilder
             {
                 { typeof(bool), new BoolGenerator() },
                 { typeof(byte), new ByteGenerator() },
+                { typeof(char), new CharGenerator() },
                 { typeof(DateTime), new DateTimeGenerator() },
+                { typeof(decimal), new DecimalGenerator() },
+                { typeof(double), new DoubleGenerator() },
+                { typeof(float), new FloatGenerator() },
                 { typeof(int), new IntGenerator() },
-                { typeof(string), new StringGenerator() }
+                { typeof(long), new LongGenerator() },
+                { typeof(sbyte), new SbyteGenerator() },
+                { typeof(short), new ShortGenerator() },
+                { typeof(string), new StringGenerator() },
+                { typeof(uint), new UintGenerator() },
+                { typeof(ulong), new UlongGenerator() },
+                { typeof(ushort), new UshortGenerator() }
             };
         }
     }

@@ -6,7 +6,7 @@ namespace FixtureBuilder.Generators
 {
     public class DateTimeGenerator : IGenerator
     {
-        private DateTime LastValue { get; set; } = DeterministicDateTime.UtcNow.AddYears(-1);
+        private static DateTime LastValue { get; set; } = DeterministicDateTime.UtcNow.AddYears(-1);
 
         public object Generate()
         {

@@ -6,7 +6,7 @@ namespace FixtureBuilder.Generators
 {
     public class BoolGenerator : IGenerator
     {
-        private bool LastValue { get; set; } = false;
+        private static bool LastValue { get; set; } = false;
 
         public object Generate()
         {

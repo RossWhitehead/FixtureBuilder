@@ -4,8 +4,9 @@ using System.Text;
 
 namespace FixtureBuilder.Generators
 {
-    public interface IGenerator
+    public struct GeneratorContext
     {
-        object Generate();
+        public Type Type { get; set; }
+        public int Many { get; set; }
     }
 }

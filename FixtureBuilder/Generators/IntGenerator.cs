@@ -6,7 +6,7 @@ namespace FixtureBuilder.Generators
 {
     public class IntGenerator : IGenerator
     {
-        private int LastValue { get; set; } = 1;
+        private static int LastValue { get; set; } = 1;
 
         public object Generate()
         {

@@ -25,7 +25,7 @@ namespace FixtureBuilder
             {
                 if(valueBuilder == null)
                 {
-                    valueBuilder = new ValueBuilder(Many, MaxDepth);
+                    valueBuilder = new ComplexValueBuilder(Many, MaxDepth);
                 }
 
                 return valueBuilder;
@@ -62,7 +62,7 @@ namespace FixtureBuilder
         {
             Type type = typeof(T);
 
-            var depth = 1;
+            var depth = 0;
             return (T)ValueBuilder.GetValue(type, depth);
         }
     }

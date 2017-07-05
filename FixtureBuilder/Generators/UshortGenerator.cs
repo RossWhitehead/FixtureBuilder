@@ -4,9 +4,9 @@ using System.Text;
 
 namespace FixtureBuilder.Generators
 {
-    public class ByteGenerator : IGenerator
+    public class UshortGenerator : IGenerator
     {
-        private static byte LastValue { get; set; } = 1;
+        private static ushort LastValue { get; set; } = 1;
 
         public object Generate()
         {
