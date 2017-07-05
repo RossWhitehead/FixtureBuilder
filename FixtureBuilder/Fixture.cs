@@ -1,4 +1,5 @@
 ﻿using System;
+using FixtureBuilder.Generators;
 
 namespace FixtureBuilder
 {
@@ -15,7 +16,7 @@ namespace FixtureBuilder
         /// <summary>
         /// The maximum depth the generator will traverse through the object graph when constructing complex types.
         /// </summary>
-        public int MaxDepth { get; set; } 
+        public int MaxDepth { get; set; }
 
         private IValueBuilder valueBuilder;
 
@@ -62,8 +63,7 @@ namespace FixtureBuilder
         {
             Type type = typeof(T);
 
-            var depth = 0;
-            return (T)ValueBuilder.GetValue(type, depth);
+            return (T)ValueBuilder.GetValue(type);
         }
     }
 }

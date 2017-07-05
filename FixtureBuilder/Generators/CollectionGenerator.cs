@@ -6,26 +6,22 @@ namespace FixtureBuilder.Generators
 {
     internal class CollectionGenerator : IGenerator
     {
-        private int depth;
-        private readonly int maxDepth;
-        private readonly int many;
-        private readonly Type type;
+        private GeneratorContext generatorContext;
 
-        public CollectionGenerator(int depth, int maxDepth, int many, Type type)
+        public CollectionGenerator(GeneratorContext generatorContext)
         {
-            this.depth = ++depth;
-            this.maxDepth = maxDepth;
-            this.many = many;
-            this.type = type;
+            this.generatorContext = generatorContext;
         }
 
         public object Generate()
         {
-            var instance = (IList)Activator.CreateInstance(type);
+            var instance = (IList)Activator.CreateInstance(generatorContext.Type);
 
-            var generator = new GeneratorFactory(depth, maxDepth, many).CreateGenerator(type);
+            generatorContext.Depth++;
 
-            for (int i = 0; i < many; i++)
+            var generator = new GeneratorFactory().CreateGenerator(generatorContext);
+
+            for (int i = 0; i < generatorContext.Many; i++)
             {
                 instance.Add(generator.Generate());
             }

@@ -7,13 +7,13 @@ namespace FixtureBuilder.Tests
     public class IntGeneratorTests
     {
         [Fact]
-        public void BuildInt_ReturnsASequence()
+        public void CreateInt_ReturnsASequence()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult1 = builder.Create<int>();
-            var actualResult2 = builder.Create<int>();
-            var actualResult3 = builder.Create<int>();
+            var fixture = new Fixture();
+            var actualResult1 = fixture.Create<int>();
+            var actualResult2 = fixture.Create<int>();
+            var actualResult3 = fixture.Create<int>();
 
             // Assert
             actualResult1.Should().Be(1);

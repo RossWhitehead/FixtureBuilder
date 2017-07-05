@@ -8,22 +8,16 @@ namespace FixtureBuilder.Generators
 {
     internal class ClassGenerator : IGenerator
     {
-        private int depth;
-        private readonly int maxDepth;
-        private readonly int many;
-        private readonly Type type;
+        private GeneratorContext generatorContext;
 
-        public ClassGenerator(int depth, int maxDepth, int many, Type type)
+        public ClassGenerator(GeneratorContext generatorContext)
         {
-            this.depth = ++depth;
-            this.maxDepth = maxDepth;
-            this.many = many;
-            this.type = type;
+            this.generatorContext = generatorContext;
         }
 
         public object Generate()
         {
-            var constructorInfo = type.GetConstructors().OrderBy(c => c.GetParameters().Count()).First();
+            var constructorInfo = generatorContext.Type.GetConstructors().OrderBy(c => c.GetParameters().Count()).First();
 
             var parameters = new List<object>();
 
@@ -34,11 +28,14 @@ namespace FixtureBuilder.Generators
 
             var instance = constructorInfo.Invoke(parameters.ToArray());
 
-            if (depth <= maxDepth)
+            if (generatorContext.Depth <= generatorContext.MaxDepth)
             {
-                foreach (PropertyInfo propertyInfo in type.GetProperties())
+                generatorContext.Depth++;
+
+                foreach (PropertyInfo propertyInfo in generatorContext.Type.GetProperties())
                 {
-                    var generator = new GeneratorFactory(depth, maxDepth, many).CreateGenerator(propertyInfo.PropertyType);
+                    generatorContext.Type = propertyInfo.PropertyType;
+                    var generator = new GeneratorFactory().CreateGenerator(generatorContext);
                     propertyInfo.SetValue(instance, generator.Generate());
                 }
             }

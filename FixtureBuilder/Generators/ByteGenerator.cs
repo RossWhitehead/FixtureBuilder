@@ -4,13 +4,18 @@ using System.Text;
 
 namespace FixtureBuilder.Generators
 {
-    public class ByteGenerator : IGenerator
+    internal class ByteGenerator : IGenerator
     {
-        private static byte LastValue { get; set; } = 1;
+        private GeneratorContext generatorContext;
+
+        public ByteGenerator(GeneratorContext generatorContext)
+        {
+            this.generatorContext = generatorContext;
+        }
 
         public object Generate()
         {
-            return LastValue++;
+            return generatorContext.LastByte++;
         }
     }
 }

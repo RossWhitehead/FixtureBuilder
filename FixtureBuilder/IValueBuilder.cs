@@ -4,6 +4,6 @@ namespace FixtureBuilder
 {
     public interface IValueBuilder
     {
-        object GetValue(Type type, int depth);
+        object GetValue(Type type);
     }
 }

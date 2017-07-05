@@ -4,14 +4,19 @@ using System.Text;
 
 namespace FixtureBuilder.Generators
 {
-    public class BoolGenerator : IGenerator
+    internal class BoolGenerator : IGenerator
     {
-        private static bool LastValue { get; set; } = false;
+        private GeneratorContext generatorContext;
+
+        public BoolGenerator(GeneratorContext generatorContext)
+        {
+            this.generatorContext = generatorContext;
+        }
 
         public object Generate()
         {
-            LastValue = !LastValue;
-            return LastValue;
+            generatorContext.LastBool = !generatorContext.LastBool;
+            return generatorContext.LastBool;
         }
     }
 }

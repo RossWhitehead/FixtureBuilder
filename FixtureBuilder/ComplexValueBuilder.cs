@@ -10,18 +10,18 @@ namespace FixtureBuilder
 {
     public class ComplexValueBuilder : IValueBuilder
     {
-        private readonly int many;
-        private readonly int maxDepth;
+        private GeneratorContext generatorContext;
 
         public ComplexValueBuilder(int many, int maxDepth)
         {
-            this.many = many;
-            this.maxDepth = maxDepth;
+            this.generatorContext = new GeneratorContext(many, 1, maxDepth);
         }
 
-        public object GetValue(Type type, int depth)
+        public object GetValue(Type type)
         {
-            IGenerator generator = new GeneratorFactory().CreateGenerator(type);
+            generatorContext.Type = type;
+            generatorContext.Depth = 1;
+            IGenerator generator = new GeneratorFactory().CreateGenerator(generatorContext);
             return generator.Generate();
         }
     }

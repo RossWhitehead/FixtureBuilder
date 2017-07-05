@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FixtureBuilder.Generators
+﻿namespace FixtureBuilder.Generators
 {
-    public class DecimalGenerator : IGenerator
+    internal class DecimalGenerator : IGenerator
     {
-        private static decimal LastValue { get; set; } = 1;
+        private GeneratorContext generatorContext;
+
+        public DecimalGenerator(GeneratorContext generatorContext)
+        {
+            this.generatorContext = generatorContext;
+        }
 
         public object Generate()
         {
-            return LastValue++;
+            return generatorContext.LastDecimal++;
         }
     }
 }

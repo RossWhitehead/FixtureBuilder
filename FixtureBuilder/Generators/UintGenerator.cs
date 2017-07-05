@@ -6,11 +6,17 @@ namespace FixtureBuilder.Generators
 {
     public class UintGenerator : IGenerator
     {
-        private static uint LastValue { get; set; } = 1;
+        private static uint LastValue { get; set; } = seed;
+        private static readonly uint seed = 1;
 
         public object Generate()
         {
             return LastValue++;
+        }
+
+        public static void Reset()
+        {
+            LastValue = seed;
         }
     }
 }

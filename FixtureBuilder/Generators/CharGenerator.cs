@@ -2,14 +2,19 @@
 
 namespace FixtureBuilder.Generators
 {
-    public class CharGenerator : IGenerator
+    internal class CharGenerator : IGenerator
     {
-        private static ushort LastValue { get; set; } = 0;
+        private GeneratorContext generatorContext;
+
+        public CharGenerator(GeneratorContext generatorContext)
+        {
+            this.generatorContext = generatorContext;
+        }
 
         public object Generate()
         {
             // Chars are 16-bit unicode characters
-            return Convert.ToChar(++LastValue);
+            return Convert.ToChar(++generatorContext.LastChar);
         }
     }
 }

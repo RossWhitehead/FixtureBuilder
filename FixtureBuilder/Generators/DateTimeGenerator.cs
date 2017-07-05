@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FixtureBuilder.Generators
+﻿namespace FixtureBuilder.Generators
 {
-    public class DateTimeGenerator : IGenerator
+    internal class DateTimeGenerator : IGenerator
     {
-        private static DateTime LastValue { get; set; } = DeterministicDateTime.UtcNow.AddYears(-1);
+        private GeneratorContext generatorContext;
+
+        public DateTimeGenerator(GeneratorContext generatorContext)
+        {
+            this.generatorContext = generatorContext;
+        }
 
         public object Generate()
         {
-            var value = LastValue;
-            LastValue = LastValue.AddDays(1);
+            var value = generatorContext.LastDateTime;
+            generatorContext.LastDateTime = generatorContext.LastDateTime.AddDays(1);
             return value;
         }
     }

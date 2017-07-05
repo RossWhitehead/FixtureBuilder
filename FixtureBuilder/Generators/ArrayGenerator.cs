@@ -5,26 +5,21 @@ using System.Text;
 
 namespace FixtureBuilder.Generators
 {
-    public class ArrayGenerator : IGenerator
+    internal class ArrayGenerator : IGenerator
     {
-        private readonly int depth;
-        private readonly int maxDepth;
-        private readonly int many;
-        private readonly Type type;
+        private GeneratorContext generatorContext;
 
-        public ArrayGenerator(int depth, int maxDepth, int many, Type type)
+        public ArrayGenerator(GeneratorContext generatorContext)
         {
-            this.depth = depth;
-            this.maxDepth = maxDepth;
-            this.many = many;
-            this.type = type;
+            this.generatorContext = generatorContext;
         }
 
         public object Generate()
         {
-            var instance = (IList)Activator.CreateInstance(type, many);
+            var instance = (IList)Activator.CreateInstance(generatorContext.Type, generatorContext.Many);
 
-            var generator = new GeneratorFactory(depth, maxDepth, many).CreateGenerator(instance[0].GetType());
+            generatorContext.Type = instance[0].GetType();
+            var generator = new GeneratorFactory(generatorContext.Depth, generatorContext.MaxDepth, generatorContext.Many).CreateGenerator(generatorContext);
 
             for (int i = 0; i < instance.Count; i++)
             {
