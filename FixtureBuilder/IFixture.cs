@@ -2,8 +2,8 @@
 {
     public interface IFixture
     {
-        int Many { get; set; }
-        int MaxDepth { get; set; }
+        uint Many { get; set; }
+        uint MaxDepth { get; set; }
 
         IPropertySpecifier<T> Build<T>();
         T Create<T>();

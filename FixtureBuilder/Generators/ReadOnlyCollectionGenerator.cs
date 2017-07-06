@@ -6,35 +6,36 @@ namespace FixtureBuilder.Generators
 {
     internal class ReadOnlyCollectionGenerator : IGenerator
     {
-        private int depth;
-        private readonly int maxDepth;
-        private readonly int many;
-        private readonly Type type;
+        private readonly GeneratorFactory generatorFactory;
+        private uint many;
+        private uint maxDepth;
 
-        public ReadOnlyCollectionGenerator(int depth, int maxDepth, int many, Type type)
+        public ReadOnlyCollectionGenerator(GeneratorFactory generatorFactory, uint many, uint maxDepth)
         {
-            this.depth = ++depth;
-            this.maxDepth = maxDepth;
+            this.generatorFactory = generatorFactory;
             this.many = many;
-            this.type = type;
+            this.maxDepth = maxDepth;
         }
+
+        public Type Type { get; set; }
+        public uint Depth { get; set; }
 
         public object Generate()
         {
-            var ofType = type.GenericTypeArguments[0];
+            var genericType = Type.GenericTypeArguments[0];
             var listType = typeof(List<>);
-            var constructedListType = listType.MakeGenericType(ofType);
+            var constructedListType = listType.MakeGenericType(genericType);
 
             var list = (IList)Activator.CreateInstance(constructedListType);
 
-            var generator = new GeneratorFactory(depth, maxDepth, many).CreateGenerator(ofType);
+            var generator = generatorFactory.GetGenerator(genericType, ++Depth);
 
             for (int i = 0; i < many; i++)
             {
                 list.Add(generator.Generate());
             }
 
-            var instance = Activator.CreateInstance(type, list);
+            var instance = Activator.CreateInstance(Type, list);
 
             return instance;
         }

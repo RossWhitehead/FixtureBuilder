@@ -113,7 +113,8 @@ namespace FixtureBuilder.Tests
             actualResult.Prop1.Prop1.Should().BeOfType(typeof(RecursiveClass));
             actualResult.Prop1.Prop1.Prop1.Should().BeOfType(typeof(RecursiveClass));
             actualResult.Prop1.Prop1.Prop1.Prop1.Should().BeOfType(typeof(RecursiveClass));
-            actualResult.Prop1.Prop1.Prop1.Prop1.Prop1.Should().BeNull();
+            actualResult.Prop1.Prop1.Prop1.Prop1.Prop1.Should().BeOfType(typeof(RecursiveClass));
+            actualResult.Prop1.Prop1.Prop1.Prop1.Prop1.Prop1.Should().BeNull();
         }
 
     }

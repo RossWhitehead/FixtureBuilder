@@ -11,14 +11,16 @@ namespace FixtureBuilder
         /// <summary>
         /// How "many" elements to return for generated collections.
         /// </summary>
-        public int Many { get; set; }
+        public uint Many { get; set; }
 
         /// <summary>
         /// The maximum depth the generator will traverse through the object graph when constructing complex types.
         /// </summary>
-        public int MaxDepth { get; set; }
+        public uint MaxDepth { get; set; }
 
         private IValueBuilder valueBuilder;
+
+        private GeneratorFactory generatorFactory;
 
         private IValueBuilder ValueBuilder
         {
@@ -26,7 +28,7 @@ namespace FixtureBuilder
             {
                 if(valueBuilder == null)
                 {
-                    valueBuilder = new ComplexValueBuilder(Many, MaxDepth);
+                    valueBuilder = new ComplexValueBuilder(generatorFactory);
                 }
 
                 return valueBuilder;
@@ -38,10 +40,9 @@ namespace FixtureBuilder
         /// </summary>
         /// <param name="many">How "many" elements to return for generated collections.</param>
         /// <param name="maxDepth">The maximum depth the generator will traverse through the object graph when constructing complex types.</param>
-        public Fixture(int many = 3, int maxDepth = 5)
+        public Fixture(uint many = 3, uint maxDepth = 5)
         {
-            Many = many;
-            MaxDepth = maxDepth;
+            this.generatorFactory = new GeneratorFactory(many, maxDepth);
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace FixtureBuilder
         /// <returns>A <see cref="IPropertySpecifier{T}"/>.</returns>
         public IPropertySpecifier<T> Build<T>()
         {
-            return new PropertySpecifier<T>(ValueBuilder, Many);
+            return new PropertySpecifier<T>(ValueBuilder);
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,16 +7,23 @@ namespace FixtureBuilder.Generators
 {
     internal class ClassGenerator : IGenerator
     {
-        private GeneratorContext generatorContext;
+        private readonly GeneratorFactory generatorFactory;
+        private uint many;
+        private uint maxDepth;
 
-        public ClassGenerator(GeneratorContext generatorContext)
+        public ClassGenerator(GeneratorFactory generatorFactory, uint many, uint maxDepth)
         {
-            this.generatorContext = generatorContext;
+            this.generatorFactory = generatorFactory;
+            this.many = many;
+            this.maxDepth = maxDepth;
         }
+
+        public Type Type { get; set; }
+        public uint Depth { get; set; }
 
         public object Generate()
         {
-            var constructorInfo = generatorContext.Type.GetConstructors().OrderBy(c => c.GetParameters().Count()).First();
+            var constructorInfo = this.Type.GetConstructors().OrderBy(c => c.GetParameters().Count()).First();
 
             var parameters = new List<object>();
 
@@ -28,14 +34,14 @@ namespace FixtureBuilder.Generators
 
             var instance = constructorInfo.Invoke(parameters.ToArray());
 
-            if (generatorContext.Depth <= generatorContext.MaxDepth)
+            if (Depth <= maxDepth)
             {
-                generatorContext.Depth++;
+                Depth++;
 
-                foreach (PropertyInfo propertyInfo in generatorContext.Type.GetProperties())
+                foreach (PropertyInfo propertyInfo in this.Type.GetProperties())
                 {
-                    generatorContext.Type = propertyInfo.PropertyType;
-                    var generator = new GeneratorFactory().CreateGenerator(generatorContext);
+                    var propertyType = propertyInfo.PropertyType;
+                    var generator = generatorFactory.GetGenerator(propertyType, Depth);
                     propertyInfo.SetValue(instance, generator.Generate());
                 }
             }

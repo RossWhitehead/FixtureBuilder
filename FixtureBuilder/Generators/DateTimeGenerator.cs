@@ -1,18 +1,15 @@
-﻿namespace FixtureBuilder.Generators
+﻿using System;
+
+namespace FixtureBuilder.Generators
 {
     internal class DateTimeGenerator : IGenerator
     {
-        private GeneratorContext generatorContext;
-
-        public DateTimeGenerator(GeneratorContext generatorContext)
-        {
-            this.generatorContext = generatorContext;
-        }
+        private DateTime lastDateTime = DeterministicDateTime.UtcNow.AddYears(-1);
 
         public object Generate()
         {
-            var value = generatorContext.LastDateTime;
-            generatorContext.LastDateTime = generatorContext.LastDateTime.AddDays(1);
+            var value = lastDateTime;
+            lastDateTime = lastDateTime.AddDays(1);
             return value;
         }
     }

@@ -2,16 +2,11 @@
 {
     internal class DecimalGenerator : IGenerator
     {
-        private GeneratorContext generatorContext;
-
-        public DecimalGenerator(GeneratorContext generatorContext)
-        {
-            this.generatorContext = generatorContext;
-        }
+        private decimal lastDecimal = 1;
 
         public object Generate()
         {
-            return generatorContext.LastDecimal++;
+            return lastDecimal++;
         }
     }
 }

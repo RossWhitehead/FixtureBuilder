@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FixtureBuilder.Generators
+﻿namespace FixtureBuilder.Generators
 {
     internal class ByteGenerator : IGenerator
     {
-        private GeneratorContext generatorContext;
-
-        public ByteGenerator(GeneratorContext generatorContext)
-        {
-            this.generatorContext = generatorContext;
-        }
+        private byte lastByte = 1;
 
         public object Generate()
         {
-            return generatorContext.LastByte++;
+            return lastByte++;
         }
     }
 }

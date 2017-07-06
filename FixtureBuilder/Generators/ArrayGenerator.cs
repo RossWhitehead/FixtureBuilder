@@ -1,25 +1,30 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FixtureBuilder.Generators
 {
     internal class ArrayGenerator : IGenerator
     {
-        private GeneratorContext generatorContext;
+        private readonly GeneratorFactory generatorFactory;
+        private uint many;
+        private uint maxDepth;
 
-        public ArrayGenerator(GeneratorContext generatorContext)
+        public ArrayGenerator(GeneratorFactory generatorFactory, uint many, uint maxDepth)
         {
-            this.generatorContext = generatorContext;
+            this.generatorFactory = generatorFactory;
+            this.many = many;
+            this.maxDepth = maxDepth;
         }
+
+        public Type Type { get; set; }
+        public uint Depth { get; set; }
 
         public object Generate()
         {
-            var instance = (IList)Activator.CreateInstance(generatorContext.Type, generatorContext.Many);
+            var instance = (IList)Activator.CreateInstance(Type, many ;
 
-            generatorContext.Type = instance[0].GetType();
-            var generator = new GeneratorFactory(generatorContext.Depth, generatorContext.MaxDepth, generatorContext.Many).CreateGenerator(generatorContext);
+            var elementType = instance[0].GetType();
+            var generator = generatorFactory.GetGenerator(elementType, ++Depth);
 
             for (int i = 0; i < instance.Count; i++)
             {

@@ -9,13 +9,12 @@ namespace FixtureBuilder
     public class PropertySpecifier<T> : IPropertySpecifier<T>
     {
         private IValueBuilder valueBuilder;
-        private readonly int many;
+        private readonly uint many;
         private Dictionary<Expression<Func<T, object>>, object> propertySpecifications;
 
-        public PropertySpecifier(IValueBuilder valueBuilder, int many)
+        public PropertySpecifier(IValueBuilder valueBuilder)
         {
             this.valueBuilder = valueBuilder;
-            this.many = many;
             this.propertySpecifications = new Dictionary<Expression<Func<T, object>>, object>();
         }
 
