@@ -11,49 +11,58 @@ namespace FixtureBuilder
         public GeneratorFactory(uint many, uint maxDepth)
         {
             arrayGenerator = new ArrayGenerator(this, many, maxDepth);
+            bitArrayGenerator = new BitArrayGenerator(many);
             boolGenerator = new BoolGenerator();
             byteGenerator = new ByteGenerator();
             charGenerator = new CharGenerator();
             classGenerator = new ClassGenerator(this, many, maxDepth);
-            collectionGenerator = new CollectionGenerator(this, many, maxDepth);
+            collectionGenerator = new CollectionGenerator(many);
             dateTimeGenerator = new DateTimeGenerator();
             decimalGenerator = new DecimalGenerator();
-            dictionaryGenerator = new DictionaryGenerator(this, many, maxDepth);
+            dictionaryGenerator = new DictionaryGenerator(many);
             doubleGenerator = new DoubleGenerator();
             enumGenerator = new EnumGenerator();
             floatGenerator = new FloatGenerator();
+            genericCollectionGenerator = new GenericCollectionGenerator(this, many, maxDepth);
+            genericDictionaryGenerator = new GenericDictionaryGenerator(this, many, maxDepth);
             intGenerator = new IntGenerator();
             longGenerator = new LongGenerator();
             readOnlyCollectionGenerator = new ReadOnlyCollectionGenerator(this, many, maxDepth);
             sbyteGenerator = new SbyteGenerator();
             shortGenerator = new ShortGenerator();
             stringGenerator = new StringGenerator();
+            structGenerator = new StructGenerator(this, many, maxDepth);
             uintGenerator = new UintGenerator();
             ulongGenerator = new UlongGenerator();
             ushortGenerator = new UshortGenerator();
         }
 
         private readonly ArrayGenerator arrayGenerator;
+        private readonly BitArrayGenerator bitArrayGenerator;
         private readonly BoolGenerator boolGenerator;
         private readonly ByteGenerator byteGenerator;
         private readonly CharGenerator charGenerator;
         private readonly ClassGenerator classGenerator;
+        private readonly CollectionGenerator collectionGenerator;
         private readonly DateTimeGenerator dateTimeGenerator;
         private readonly DecimalGenerator decimalGenerator;
+        private readonly DictionaryGenerator dictionaryGenerator;
         private readonly DoubleGenerator doubleGenerator;
         private readonly EnumGenerator enumGenerator;
         private readonly FloatGenerator floatGenerator;
+        private readonly GenericCollectionGenerator genericCollectionGenerator;
+        private readonly GenericDictionaryGenerator genericDictionaryGenerator;
         private readonly IntGenerator intGenerator;
         private readonly LongGenerator longGenerator;
+        private readonly ReadOnlyCollectionGenerator readOnlyCollectionGenerator;
         private readonly SbyteGenerator sbyteGenerator;
         private readonly ShortGenerator shortGenerator;
         private readonly StringGenerator stringGenerator;
+        private readonly StructGenerator structGenerator;
         private readonly UintGenerator uintGenerator;
         private readonly UlongGenerator ulongGenerator;
         private readonly UshortGenerator ushortGenerator;
-        private readonly ReadOnlyCollectionGenerator readOnlyCollectionGenerator;
-        private readonly DictionaryGenerator dictionaryGenerator;
-        private readonly CollectionGenerator collectionGenerator;
+
 
         public IGenerator GetGenerator(Type type)
         {
@@ -67,13 +76,27 @@ namespace FixtureBuilder
                 arrayGenerator.Type = type;
                 arrayGenerator.Depth = depth;
                 return arrayGenerator;
-            } 
+            }
+
+            if (type == typeof(BitArray)) return bitArrayGenerator;
 
             if (type == typeof(bool)) return boolGenerator;
 
             if (type == typeof(byte)) return byteGenerator;
 
             if (type == typeof(char)) return charGenerator;
+
+            if (!type.GetTypeInfo().IsGenericType && type.GetInterfaces().Any(t => t == typeof(IDictionary)))
+            {
+                dictionaryGenerator.Type = type;
+                return dictionaryGenerator;
+            }
+
+            if (!type.GetTypeInfo().IsGenericType && type.GetInterfaces().Any(t => t == typeof(ICollection)))
+            {
+                collectionGenerator.Type = type;
+                return collectionGenerator;
+            }
 
             if (type == typeof(DateTime)) return dateTimeGenerator;
 
@@ -96,36 +119,21 @@ namespace FixtureBuilder
                 return enumGenerator;
             }
 
-            // TODO: Improve checks
-            if (type.GetInterfaces().Any(t => t.Name == "IReadOnlyCollection`1") && !type.GetInterfaces().Any(t => t.Name == "IDictionary"))
+            if (type.GetTypeInfo().IsGenericType &&  
+                type.GetInterfaces().Any(t => t.Name == "IReadOnlyCollection`1") && 
+                !type.GetInterfaces().Any(t => t.Name == "IDictionary"))
             {
                 readOnlyCollectionGenerator.Type = type;
                 readOnlyCollectionGenerator.Depth = depth;
                 return readOnlyCollectionGenerator;
             }
 
-            // The check for dictionary needs to be after the check for readonlycollection (see above)
-            // And needs to be befoe the IEnumerable and IsClass checks.
-            if (type.GetInterfaces().Any(t => t.Name == "IDictionary"))
+            if (type.GetTypeInfo().IsGenericType && 
+                type.GetInterfaces().Any(t => t.Name == "IDictionary"))
             {
-                dictionaryGenerator.Type = type;
-                dictionaryGenerator.Depth = depth;
-                return dictionaryGenerator;
-            }
-
-            // TODO: Differentiate between IEnumerable and IEnumerable<,>
-            if (type.GetInterfaces().Any(t => t == typeof(IEnumerable)))
-            {
-                collectionGenerator.Type = type;
-                collectionGenerator.Depth = depth;
-                return collectionGenerator;
-            }
-
-            if (type.GetTypeInfo().IsClass)
-            {
-                classGenerator.Type = type;
-                classGenerator.Depth = depth;
-                return classGenerator;
+                genericDictionaryGenerator.Type = type;
+                genericDictionaryGenerator.Depth = depth;
+                return genericDictionaryGenerator;
             }
 
             if (type == typeof(sbyte)) return sbyteGenerator;
@@ -137,6 +145,20 @@ namespace FixtureBuilder
             if (type == typeof(ulong)) return ulongGenerator;
 
             if (type == typeof(ushort)) return ushortGenerator;
+
+            if (type.GetTypeInfo().IsValueType)
+            {
+                structGenerator.Type = type;
+                structGenerator.Depth = depth;
+                return structGenerator;
+            }
+
+            if (type.GetTypeInfo().IsClass)
+            {
+                classGenerator.Type = type;
+                classGenerator.Depth = depth;
+                return classGenerator;
+            }
 
             throw new TypeNotSupportedException(type);
         }

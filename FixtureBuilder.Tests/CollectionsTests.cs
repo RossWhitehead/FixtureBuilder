@@ -16,24 +16,23 @@ namespace FixtureBuilder.Tests
             this.fixture = new Fixture();
         }
 
+        // Array - not strictly a collection
+        // ArrayList
+        // BitArray
+        // Hashtable
+        // Queue
+        // SortedList
+        // Stack
+
         [Fact]
-        public void BuildIntArray_ReturnsAnArrayOfInts()
+        public void BuildIntArray_ReturnsAPopulatedArrayOfInts()
         {
             // Act
             var actualResult = fixture.Create<int[]>();
 
             // Assert
             actualResult.Should().BeOfType(typeof(int[]));
-        }
-
-        [Fact]
-        public void BuildIntArray_ReturnsAPopulatedArrayWith3Items()
-        {
-            // Act
-            var actualResult = fixture.Create<int[]>();
-
-            // Assert
-            actualResult.Should().HaveCount(3);
+            actualResult.Length.Should().Be(3);
             actualResult[0].Should().BePositive();
             actualResult[1].Should().BePositive();
             actualResult[2].Should().BePositive();
@@ -48,49 +47,32 @@ namespace FixtureBuilder.Tests
 
             // Assert
             actualResult.Should().BeOfType(typeof(ArrayList));
+            actualResult.Count.Should().Be(3);
         }
 
         [Fact]
-        public void BuildList_ReturnsAList()
+        public void BuildBitArray_ReturnsABitArray()
         {
             // Act
-            var actualResult = fixture.Create<List<int>>();
+            var actualResult = fixture.Create<BitArray>();
 
             // Assert
-            actualResult.Should().BeOfType(typeof(List<int>));
+            actualResult.Should().BeOfType(typeof(BitArray));
+            actualResult.Length.Should().Be(3);
+            actualResult.Get(0).Should().BeTrue();
+            actualResult.Get(1).Should().BeTrue();
+            actualResult.Get(2).Should().BeTrue();
         }
 
         [Fact]
-        public void BuildList_ReturnsAPopulatedListWith3Items()
+        public void BuildHashtable_ReturnsAHashtable()
         {
             // Act
-            var actualResult = fixture.Create<List<int>>();
+            var actualResult = fixture.Create<Hashtable>();
 
             // Assert
-            actualResult.Should().HaveCount(3);
-            actualResult[0].Should().BePositive();
-            actualResult[1].Should().BePositive();
-            actualResult[2].Should().BePositive();
-        }
-
-        [Fact]
-        public void BuildReadOnlyCollection_ReturnsAReadOnlyCollection()
-        {
-            // Act
-            var actualResult = fixture.Create<ReadOnlyCollection<int>>();
-
-            // Assert
-            actualResult.Should().BeOfType(typeof(ReadOnlyCollection<int>));
-        }
-
-        [Fact]
-        public void BuildDictionary_ReturnsADictionary()
-        {
-            // Act
-            var actualResult = fixture.Create<Dictionary<int, string>>();
-
-            // Assert
-            actualResult.Should().BeOfType(typeof(Dictionary<int, string>));
+            actualResult.Should().BeOfType(typeof(Hashtable));
+            actualResult.Count.Should().Be(3);
         }
     }
 }

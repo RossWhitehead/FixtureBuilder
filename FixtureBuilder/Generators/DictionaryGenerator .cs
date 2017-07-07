@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace FixtureBuilder.Generators
 {
-    internal class CollectionGenerator : IGenerator
+    internal class DictionaryGenerator : IGenerator
     {
         private uint many;
 
-        public CollectionGenerator(uint many)
+        public DictionaryGenerator(uint many)
         {
             this.many = many;
         }
@@ -16,11 +17,11 @@ namespace FixtureBuilder.Generators
 
         public object Generate()
         {
-            var instance = (IList)Activator.CreateInstance(Type, new object[] { (int)many });
+            var instance = (IDictionary)Activator.CreateInstance(Type);
 
-            for (int i = 0; i < many; i ++)
+            for (int i = 0; i < many; i++)
             {
-                instance.Add(new object());
+                instance.Add(new object(), new object());
             }
 
             return instance;
