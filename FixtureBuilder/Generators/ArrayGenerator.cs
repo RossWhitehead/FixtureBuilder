@@ -21,7 +21,7 @@ namespace FixtureBuilder.Generators
 
         public object Generate()
         {
-            var instance = (IList)Activator.CreateInstance(Type, many ;
+            var instance = (IList)Activator.CreateInstance(Type, (int)many) ;
 
             var elementType = instance[0].GetType();
             var generator = generatorFactory.GetGenerator(elementType, ++Depth);

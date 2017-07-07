@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using FluentAssertions;
@@ -8,12 +9,18 @@ namespace FixtureBuilder.Tests
 {
     public class CollectionsTests
     {
+        private Fixture fixture;
+
+        public CollectionsTests()
+        {
+            this.fixture = new Fixture();
+        }
+
         [Fact]
         public void BuildIntArray_ReturnsAnArrayOfInts()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<int[]>();
+            var actualResult = fixture.Create<int[]>();
 
             // Assert
             actualResult.Should().BeOfType(typeof(int[]));
@@ -23,8 +30,7 @@ namespace FixtureBuilder.Tests
         public void BuildIntArray_ReturnsAPopulatedArrayWith3Items()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<int[]>();
+            var actualResult = fixture.Create<int[]>();
 
             // Assert
             actualResult.Should().HaveCount(3);
@@ -33,12 +39,22 @@ namespace FixtureBuilder.Tests
             actualResult[2].Should().BePositive();
         }
 
+
+        [Fact]
+        public void BuildArrayList_ReturnsAnArrayList()
+        {
+            // Act
+            var actualResult = fixture.Create<ArrayList>();
+
+            // Assert
+            actualResult.Should().BeOfType(typeof(ArrayList));
+        }
+
         [Fact]
         public void BuildList_ReturnsAList()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<List<int>>();
+            var actualResult = fixture.Create<List<int>>();
 
             // Assert
             actualResult.Should().BeOfType(typeof(List<int>));
@@ -48,8 +64,7 @@ namespace FixtureBuilder.Tests
         public void BuildList_ReturnsAPopulatedListWith3Items()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<List<int>>();
+            var actualResult = fixture.Create<List<int>>();
 
             // Assert
             actualResult.Should().HaveCount(3);
@@ -62,8 +77,7 @@ namespace FixtureBuilder.Tests
         public void BuildReadOnlyCollection_ReturnsAReadOnlyCollection()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<ReadOnlyCollection<int>>();
+            var actualResult = fixture.Create<ReadOnlyCollection<int>>();
 
             // Assert
             actualResult.Should().BeOfType(typeof(ReadOnlyCollection<int>));
@@ -73,8 +87,7 @@ namespace FixtureBuilder.Tests
         public void BuildDictionary_ReturnsADictionary()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<Dictionary<int, string>>();
+            var actualResult = fixture.Create<Dictionary<int, string>>();
 
             // Assert
             actualResult.Should().BeOfType(typeof(Dictionary<int, string>));

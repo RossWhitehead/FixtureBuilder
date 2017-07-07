@@ -6,23 +6,38 @@ namespace FixtureBuilder.Tests
 {
     public class ReferenceTypeTests
     {
+        private Fixture fixture;
+
+        public ReferenceTypeTests()
+        {
+            this.fixture = new Fixture();
+        }
+
         [Fact]
-        public void BuildSimpleClass_ReturnsAnInstanceOfTheClass()
+        public void CreateDynamic_ReturnsADynamic()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<SimpleClass>();
+            var actualResult = fixture.Create<dynamic>();
+
+            // Assert
+            Assert.NotNull(actualResult);
+        }
+
+        [Fact]
+        public void CreateSimpleClass_ReturnsAnInstanceOfTheClass()
+        {
+            // Act
+            var actualResult = fixture.Create<SimpleClass>();
 
             // Assert
             actualResult.Should().BeOfType(typeof(SimpleClass));
         }
 
         [Fact]
-        public void BuildSimpleClassWithValueTypeParameters_PopulatesParameters()
+        public void CreateSimpleClassWithValueTypeParameters_PopulatesParameters()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<SimpleClassWithValueTypeParameters>();
+            var actualResult = fixture.Create<SimpleClassWithValueTypeParameters>();
 
             // Assert
             actualResult.Prop1.Should().NotBe(0);
@@ -33,8 +48,7 @@ namespace FixtureBuilder.Tests
         public void BuildSimpleClassWithReferenceTypeParameters_PopulatesParameters()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<SimpleClassWithReferenceTypeParameters>();
+            var actualResult = fixture.Create<SimpleClassWithReferenceTypeParameters>();
 
             // Assert
             actualResult.Prop1.Should().BeOfType(typeof(SimpleClass));
@@ -44,8 +58,7 @@ namespace FixtureBuilder.Tests
         public void BuildSimpleClassWithReferenceTypeParameters_PopulatesParametersOfChild()
         {
             // Act
-            var builder = new Fixture();
-            var actualResult = builder.Create<SimpleClassWithReferenceTypeParameters>();
+            var actualResult = fixture.Create<SimpleClassWithReferenceTypeParameters>();
 
             // Assert
             actualResult.Prop1.Prop1.Should().NotBe(0);

@@ -20,6 +20,7 @@ namespace FixtureBuilder
             decimalGenerator = new DecimalGenerator();
             dictionaryGenerator = new DictionaryGenerator(this, many, maxDepth);
             doubleGenerator = new DoubleGenerator();
+            enumGenerator = new EnumGenerator();
             floatGenerator = new FloatGenerator();
             intGenerator = new IntGenerator();
             longGenerator = new LongGenerator();
@@ -40,6 +41,7 @@ namespace FixtureBuilder
         private readonly DateTimeGenerator dateTimeGenerator;
         private readonly DecimalGenerator decimalGenerator;
         private readonly DoubleGenerator doubleGenerator;
+        private readonly EnumGenerator enumGenerator;
         private readonly FloatGenerator floatGenerator;
         private readonly IntGenerator intGenerator;
         private readonly LongGenerator longGenerator;
@@ -87,6 +89,12 @@ namespace FixtureBuilder
 
             // Must be before the collection check
             if (type == typeof(string)) return stringGenerator;
+
+            if (type.GetTypeInfo().IsEnum)
+            {
+                enumGenerator.Type = type;
+                return enumGenerator;
+            }
 
             // TODO: Improve checks
             if (type.GetInterfaces().Any(t => t.Name == "IReadOnlyCollection`1") && !type.GetInterfaces().Any(t => t.Name == "IDictionary"))

@@ -9,6 +9,11 @@
             Type = type;
         }
 
+        public TypeNotSupportedException(Type type, string message) : base(message)
+        {
+            Type = type;
+        }
+
         public Type Type { get; set; }
     }
 }

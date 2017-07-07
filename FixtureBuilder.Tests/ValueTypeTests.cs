@@ -84,7 +84,6 @@ namespace Fixturefixture.Tests
             actualResult3.Should().Be(3);
         }
 
-
         [Fact]
         public void CreateEnum_ReturnsASequence()
         {
@@ -94,9 +93,19 @@ namespace Fixturefixture.Tests
             var actualResult3 = fixture.Create<TestEnum>();
 
             // Assert
-            actualResult1.Should().Be(1);
-            actualResult2.Should().Be(2);
-            actualResult3.Should().Be(3);
+            actualResult1.Should().Be(TestEnum.One);
+            actualResult2.Should().Be(TestEnum.Two);
+            actualResult3.Should().Be(TestEnum.One);
+        }
+
+        [Fact]
+        public void CreateEnum_ThrowsTypeNotSupportedException_WhereEnumHasNoValues()
+        {
+            // Act
+            Action act = () => fixture.Create<EmptyEnum>();
+         
+            // Assert
+            act.ShouldThrow<TypeNotSupportedException>();
         }
 
         [Fact]
@@ -209,11 +218,37 @@ namespace Fixturefixture.Tests
             actualResult2.Should().Be(2);
             actualResult3.Should().Be(3);
         }
+
+        [Fact]
+        public void CreateStruct_ReturnsAStruct()
+        {
+            // Act
+            var actualResult1 = fixture.Create<TestStruct>();
+
+            // Assert
+            actualResult1.Should().BeOfType(typeof(TestStruct));
+        }
+    }
+
+    public enum EmptyEnum
+    {
     }
 
     public enum TestEnum
     {
         One = 1,
         Two = 2
+    }
+
+    public struct TestStruct
+    {
+        public decimal prop1;
+        public string prop2;
+        public ChildStruct childStruct;
+    }
+
+    public struct ChildStruct
+    {
+        public int prop1;
     }
 }
