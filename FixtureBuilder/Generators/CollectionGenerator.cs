@@ -16,12 +16,8 @@ namespace FixtureBuilder.Generators
 
         public object Generate()
         {
-            var instance = (IList)Activator.CreateInstance(Type, new object[] { (int)many });
-
-            for (int i = 0; i < many; i ++)
-            {
-                instance.Add(new object());
-            }
+            var manyObjects = new Object[3];
+            var instance = Activator.CreateInstance(Type, new object[] { manyObjects });
 
             return instance;
         }

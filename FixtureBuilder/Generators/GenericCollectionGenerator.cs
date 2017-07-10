@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace FixtureBuilder.Generators
 {
@@ -21,18 +22,20 @@ namespace FixtureBuilder.Generators
 
         public object Generate()
         {
-            var instance = (IList)Activator.CreateInstance(Type);
-
-            this.Depth++;
-
             var genericType = Type.GenericTypeArguments[0];
+            var listType = typeof(List<>);
+            var constructedListType = listType.MakeGenericType(genericType);
 
-            var generator = generatorFactory.GetGenerator(genericType);
+            var list = (IList)Activator.CreateInstance(constructedListType);
+
+            var generator = generatorFactory.GetGenerator(genericType, ++Depth);
 
             for (int i = 0; i < many; i++)
             {
-                instance.Add(generator.Generate());
+                list.Add(generator.Generate());
             }
+
+            var instance = Activator.CreateInstance(Type, list);
 
             return instance;
         }

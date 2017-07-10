@@ -81,7 +81,7 @@ namespace FixtureBuilder.Tests
         }
 
         [Fact]
-        public void BuildList_ReturnsAPopulatedQueue()
+        public void BuildQueue_ReturnsAPopulatedQueue()
         {
             // Act
             var actualResult = fixture.Create<Queue<int>>();

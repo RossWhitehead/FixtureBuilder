@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using FixtureBuilder.Generators;
@@ -27,7 +28,6 @@ namespace FixtureBuilder
             genericDictionaryGenerator = new GenericDictionaryGenerator(this, many, maxDepth);
             intGenerator = new IntGenerator();
             longGenerator = new LongGenerator();
-            readOnlyCollectionGenerator = new ReadOnlyCollectionGenerator(this, many, maxDepth);
             sbyteGenerator = new SbyteGenerator();
             shortGenerator = new ShortGenerator();
             stringGenerator = new StringGenerator();
@@ -54,7 +54,6 @@ namespace FixtureBuilder
         private readonly GenericDictionaryGenerator genericDictionaryGenerator;
         private readonly IntGenerator intGenerator;
         private readonly LongGenerator longGenerator;
-        private readonly ReadOnlyCollectionGenerator readOnlyCollectionGenerator;
         private readonly SbyteGenerator sbyteGenerator;
         private readonly ShortGenerator shortGenerator;
         private readonly StringGenerator stringGenerator;
@@ -71,6 +70,7 @@ namespace FixtureBuilder
 
         public IGenerator GetGenerator(Type type, uint depth)
         {
+            // Array
             if (type.IsArray)
             {
                 arrayGenerator.Type = type;
@@ -78,6 +78,7 @@ namespace FixtureBuilder
                 return arrayGenerator;
             }
 
+            // BitArray
             if (type == typeof(BitArray)) return bitArrayGenerator;
 
             if (type == typeof(bool)) return boolGenerator;
@@ -86,12 +87,15 @@ namespace FixtureBuilder
 
             if (type == typeof(char)) return charGenerator;
 
+            // Dictionary
             if (!type.GetTypeInfo().IsGenericType && type.GetInterfaces().Any(t => t == typeof(IDictionary)))
             {
                 dictionaryGenerator.Type = type;
                 return dictionaryGenerator;
             }
 
+            // ArrayList
+            // Hashtable
             if (!type.GetTypeInfo().IsGenericType && type.GetInterfaces().Any(t => t == typeof(ICollection)))
             {
                 collectionGenerator.Type = type;
@@ -119,17 +123,20 @@ namespace FixtureBuilder
                 return enumGenerator;
             }
 
+            // Note. Queue and Stack implement IReadOnlyCollection<>
             if (type.GetTypeInfo().IsGenericType &&  
-                type.GetInterfaces().Any(t => t.Name == "IReadOnlyCollection`1") && 
-                !type.GetInterfaces().Any(t => t.Name == "IDictionary"))
+                (type.GetInterfaces().Any(t => t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(ICollection<>)) ||
+                    type.GetInterfaces().Any(t => t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(IReadOnlyCollection<>))) && 
+                !type.GetInterfaces().Any(t => t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
             {
-                readOnlyCollectionGenerator.Type = type;
-                readOnlyCollectionGenerator.Depth = depth;
-                return readOnlyCollectionGenerator;
+                genericCollectionGenerator.Type = type;
+                genericCollectionGenerator.Depth = depth;
+                return genericCollectionGenerator;
             }
 
+            // Dictionary<,>
             if (type.GetTypeInfo().IsGenericType && 
-                type.GetInterfaces().Any(t => t.Name == "IDictionary"))
+                type.GetInterfaces().Any(t => t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
             {
                 genericDictionaryGenerator.Type = type;
                 genericDictionaryGenerator.Depth = depth;
@@ -146,6 +153,7 @@ namespace FixtureBuilder
 
             if (type == typeof(ushort)) return ushortGenerator;
 
+            // Struct
             if (type.GetTypeInfo().IsValueType)
             {
                 structGenerator.Type = type;
@@ -153,6 +161,7 @@ namespace FixtureBuilder
                 return structGenerator;
             }
 
+            // Class
             if (type.GetTypeInfo().IsClass)
             {
                 classGenerator.Type = type;
