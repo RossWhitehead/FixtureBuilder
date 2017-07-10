@@ -20,20 +20,7 @@ namespace FixtureBuilder
 
         private IValueBuilder valueBuilder;
 
-        private GeneratorFactory generatorFactory;
-
-        private IValueBuilder ValueBuilder
-        {
-            get
-            {
-                if(valueBuilder == null)
-                {
-                    valueBuilder = new ComplexValueBuilder(generatorFactory);
-                }
-
-                return valueBuilder;
-            }
-        }
+        private IGeneratorFactory generatorFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Fixture"/> class.
@@ -43,6 +30,7 @@ namespace FixtureBuilder
         public Fixture(uint many = 3, uint maxDepth = 5)
         {
             this.generatorFactory = new GeneratorFactory(many, maxDepth);
+            this.valueBuilder = new ValueBuilder(generatorFactory);
         }
 
         /// <summary>
@@ -52,7 +40,7 @@ namespace FixtureBuilder
         /// <returns>A <see cref="IPropertySpecifier{T}"/>.</returns>
         public IPropertySpecifier<T> Build<T>()
         {
-            return new PropertySpecifier<T>(ValueBuilder);
+            return new PropertySpecifier<T>(valueBuilder);
         }
 
         /// <summary>
@@ -64,7 +52,7 @@ namespace FixtureBuilder
         {
             Type type = typeof(T);
 
-            return (T)ValueBuilder.GetValue(type);
+            return (T)valueBuilder.GetValue(type);
         }
     }
 }

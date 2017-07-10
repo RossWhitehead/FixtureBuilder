@@ -7,7 +7,7 @@ using FixtureBuilder.Generators;
 
 namespace FixtureBuilder
 {
-    public class GeneratorFactory
+    public class GeneratorFactory : IGeneratorFactory
     {
         public GeneratorFactory(uint many, uint maxDepth)
         {

@@ -20,9 +20,6 @@ namespace FixtureBuilder.Tests
         // ArrayList
         // BitArray
         // Hashtable
-        // Queue
-        // SortedList
-        // Stack
 
         [Fact]
         public void BuildIntArray_ReturnsAPopulatedArrayOfInts()

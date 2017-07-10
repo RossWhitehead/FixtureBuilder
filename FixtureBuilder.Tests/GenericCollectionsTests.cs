@@ -25,7 +25,6 @@ namespace FixtureBuilder.Tests
         // Queue<>
         // ReadOnlyCollection<,>
         // SortedDictionary<,>
-        // SortedList<,>
         // SortedSet<>
         // Stack<>
 
@@ -120,7 +119,7 @@ namespace FixtureBuilder.Tests
         }
 
         [Fact]
-        public void BuildSortedList_ReturnsAPopulatedSortedList()
+        public void BuildSortedSet_ReturnsAPopulatedSortedSet()
         {
             // Act
             var actualResult = fixture.Create<SortedSet<float>>();

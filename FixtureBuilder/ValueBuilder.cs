@@ -8,11 +8,11 @@ using FixtureBuilder.Generators;
 
 namespace FixtureBuilder
 {
-    public class ComplexValueBuilder : IValueBuilder
+    public class ValueBuilder : IValueBuilder
     {
-        private readonly GeneratorFactory generatorFactory;
+        private readonly IGeneratorFactory generatorFactory;
 
-        public ComplexValueBuilder(GeneratorFactory generatorFactory)
+        public ValueBuilder(IGeneratorFactory generatorFactory)
         {
             this.generatorFactory = generatorFactory;
         }
